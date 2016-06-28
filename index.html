@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html lang="ml">
+<head>
+  <meta charset="utf-8">
+
+  <title>Javascript countdown timer</title>
+  <meta name="description" content="Simple javascript countdown timer">
+  <meta name="author" content="Sebastiaan Jansen">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <style>
+    body {
+        background-color: green;
+    }
+
+    #timer {
+      color: #fff;
+      -webkit-text-fill-color: white;
+      -webkit-text-stroke-color: black;
+      -webkit-text-stroke-width: 2px; 
+      margin: 200px 0;
+      text-align: center;
+      font-size: 6em;
+      font-family: 'Open Sans', sans-serif;
+    }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <div id="timer"></div>
+  <div id="controls">
+    <button id="toggleButton">Toggle</button>
+    <button id="resetButton">Reset</button>
+    <button id="stopFlashButton">Stop flash</button>
+  </div>
+  <script src="jquery-3.0.0.min.js"></script>
+  <script src="jquery.timer.js"></script> <!-- https://github.com/jchavannes/jquery-timer -->
+  <script>
+    var timerElement = $( "#timer" );
+    var minutes;
+    var seconds;
+    var intervalID;
+
+    var timer = $.timer(updateTimer);
+    timer.set({ time : 1000, autostart : false });
+    var flashTimer = $.timer(flashTimerElement);
+    flashTimer.set({ time : 200, autostart : false });
+
+    resetTimer();
+
+    $( "#toggleButton" ).click(function() {
+      toggleTimer();
+    });
+
+    $( "#resetButton" ).click(function() {
+      resetTimer();
+    });
+
+    $( "#stopFlashButton" ).click(function() {
+      stopFlashTimer();
+    });
+
+    function updateTimer() {
+      if(--seconds == -1) {
+        seconds = 59;
+        if(--minutes == -1) {
+          seconds = 0;
+          minutes = 0;
+          timer.stop();
+          flashTimerElement();
+          flashTimer.play();
+        }
+      }
+      updateDisplay();
+    }
+
+    function toggleTimer() {
+      timer.toggle();
+    }
+
+    function resetTimer() {
+      minutes = 0;
+      timer.stop();
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      var time=('0' + minutes).slice(-2)+':'+('0' + seconds).slice(-2);
+      timerElement.text(time);
+    }
+
+    function flashTimerElement() {
+      timerElement.css('visibility', timerElement.css('visibility') == 'hidden' ? 'visible' : 'hidden');
+    }
+
+    function stopFlashTimer() {
+      flashTimer.stop();
+      timerElement.css('visibility', 'visible');
+    }
+
+  </script>
+</body>
+</html>
