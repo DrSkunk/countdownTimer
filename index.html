@@ -10,7 +10,11 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <style>
     body {
-        background-color: green;
+      background-color: green;
+    }
+
+    #controls {
+      color: #fff;
     }
 
     #timer {
@@ -34,7 +38,14 @@
   <div id="controls">
     <button id="toggleButton">Toggle</button>
     <button id="resetButton">Reset</button>
+    <button id="startFlashButton">Start flash</button>
     <button id="stopFlashButton">Stop flash</button>
+    <button id="showClockButton">Show clock</button>
+    <button id="hideClockButton">Hide clock</button>
+    <div id="startValues">
+      Start seconds: <input id="startSeconds" type="number" min="0" step="1" value="0"/><br/>
+      Start minutes: <input id="startMinutes" type="number" min="0" step="1" value="20"/>
+    </div>
   </div>
   <script src="jquery-3.0.0.min.js"></script>
   <script src="jquery.timer.js"></script> <!-- https://github.com/jchavannes/jquery-timer -->
@@ -47,7 +58,7 @@
     var timer = $.timer(updateTimer);
     timer.set({ time : 1000, autostart : false });
     var flashTimer = $.timer(flashTimerElement);
-    flashTimer.set({ time : 200, autostart : false });
+    flashTimer.set({ time : 500, autostart : false });
 
     resetTimer();
 
@@ -59,8 +70,20 @@
       resetTimer();
     });
 
+    $( "#startFlashButton" ).click(function() {
+      startFlashTimer();
+    });
+
     $( "#stopFlashButton" ).click(function() {
       stopFlashTimer();
+    });
+
+    $( "#showClockButton" ).click(function() {
+      showClock();
+    });
+
+    $( "#hideClockButton" ).click(function() {
+      hideClock();
     });
 
     function updateTimer() {
@@ -82,8 +105,8 @@
     }
 
     function resetTimer() {
-      minutes = 0;
-      seconds = 20;
+      seconds = parseInt($( "#startSeconds" ).val());
+      minutes = parseInt($( "#startMinutes" ).val());
       timer.stop();
       updateDisplay();
     }
@@ -97,9 +120,21 @@
       timerElement.css('visibility', timerElement.css('visibility') == 'hidden' ? 'visible' : 'hidden');
     }
 
+    function startFlashTimer() {
+      flashTimer.play();
+    }
+
     function stopFlashTimer() {
       flashTimer.stop();
+      showClock();
+    }
+
+    function showClock() {
       timerElement.css('visibility', 'visible');
+    }
+
+    function hideClock() {
+      timerElement.css('visibility', 'hidden');
     }
 
   </script>
