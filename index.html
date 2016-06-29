@@ -7,25 +7,40 @@
   <title>Javascript countdown timer</title>
   <meta name="description" content="Simple javascript countdown timer">
   <meta name="author" content="Sebastiaan Jansen">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Fira+Mono|Assistant|Ubuntu+Mono|Droid+Sans+Mono|Cutive+Mono" rel="stylesheet">
   <style>
     body {
-      background-color: green;
+      background-color: #001001;
     }
 
     #controls {
       color: #fff;
+      background-color: #000;
+      padding: 10px;
+    }
+
+    #controlButtons {
+      padding: 10px 5px 5px 0;
+    }
+
+    #startValues input {
+      margin-top: 5px;
     }
 
     #timer {
       color: #fff;
-      -webkit-text-fill-color: white;
+      /*-webkit-text-fill-color: white;
       -webkit-text-stroke-color: black;
-      -webkit-text-stroke-width: 2px; 
-      margin: 200px 0;
+      -webkit-text-stroke-width: 2px;*/
+      margin: 150px 0;
       text-align: center;
-      font-size: 6em;
-      font-family: 'Open Sans', sans-serif;
+      font-size: 10em;
+      /*font-family: 'Open Sans', sans-serif;*/
+      /*font-family: 'Fira Mono', monospace;*/
+      /*font-family: 'Assistant', sans-serif;*/
+      /*font-family: 'Ubuntu Mono', monospace;*/
+      font-family: 'Droid Sans Mono', monospace;
+      /*font-family: 'Cutive Mono', monospace;*/
     }
   </style>
   <!--[if lt IE 9]>
@@ -36,12 +51,15 @@
 <body>
   <div id="timer"></div>
   <div id="controls">
-    <button id="toggleButton">Toggle</button>
-    <button id="resetButton">Reset</button>
-    <button id="startFlashButton">Start flash</button>
-    <button id="stopFlashButton">Stop flash</button>
-    <button id="showClockButton">Show clock</button>
-    <button id="hideClockButton">Hide clock</button>
+  	<div><span id="playStatus"></span> <span id="flashStatus"></span></div>
+    <div id="controlButtons">
+      <button id="toggleButton">Toggle</button>
+      <button id="resetButton">Reset</button>
+      <button id="startFlashButton">Start flash</button>
+      <button id="stopFlashButton">Stop flash</button>
+      <button id="showClockButton">Show clock</button>
+      <button id="hideClockButton">Hide clock</button>
+    </div>
     <div id="startValues">
       Start seconds: <input id="startSeconds" type="number" min="0" step="1" value="0"/><br/>
       Start minutes: <input id="startMinutes" type="number" min="0" step="1" value="20"/>
@@ -102,12 +120,18 @@
 
     function toggleTimer() {
       timer.toggle();
+      if(timer.isActive) {
+        $( "#playStatus" ).text("Counting down")
+      } else {
+        $( "#playStatus" ).text("Timer stopped")
+      }
     }
 
     function resetTimer() {
       seconds = parseInt($( "#startSeconds" ).val());
       minutes = parseInt($( "#startMinutes" ).val());
       timer.stop();
+      $( "#playStatus" ).text("Timer stopped")
       updateDisplay();
     }
 
@@ -122,11 +146,13 @@
 
     function startFlashTimer() {
       flashTimer.play();
+      $( "#flashStatus" ).text("Flashing")
     }
 
     function stopFlashTimer() {
       flashTimer.stop();
       showClock();
+      $( "#flashStatus" ).text("Flashing stopped")
     }
 
     function showClock() {
